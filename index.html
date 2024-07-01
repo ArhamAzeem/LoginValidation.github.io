@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 16 - Login Validation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 250px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 1vh 1vh black;
+        }
+
+        h2 {
+            text-align: center;
+            color: rgb(3, 153, 103);
+            text-shadow: 0px 3px 10px rgba(0, 0, 0, 0.582);
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 2vh;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            color: rgb(1, 138, 92);
+            text-shadow: 0px 3px 10px rgba(0, 0, 0, 0.582);
+        }
+
+        input {
+            padding: 8px;
+            width: 200px;
+            border: 1px solid rgb(3, 153, 103);
+            border-radius: 1vh;
+        }
+
+        #emailmessage,
+        #passmessage {
+            display: none;
+        }
+
+        #button {
+            padding: 8px 20px;
+            background-color: rgb(3, 153, 103);
+            color: #fff;
+            font-weight: bold;
+            font-size: 1rem;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #button:active {
+            box-shadow: inset 0 0 15px black;
+        }
+
+        .invalid{
+            color: red;
+            font-size: 10px;
+        }
+
+        .valid{
+            color: green;
+            font-size: 10px;
+        }
+        .invalid::before {
+            position: relative;
+            left: -10px;
+            content: "✖";
+        }
+
+        .valid::before {
+            position: relative;
+            left: -10px;
+            content: "✔";
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Task 16 - Login Validation Form</h2>
+        <form class="input-group">
+            <label>Email</label>
+            <input type="email" id="email" placeholder="Enter Your Email" required pattern="^(?=.*[0-9])(?=.*[_-])[a-zA-Z0-9_-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
+            <div id="emailmessage">
+                <div id="enumber" class="invalid">At least one digit</div>
+                <div id="especialcase" class="invalid">At least one special character</div>
+            </div>
+            <label>Password</label>
+            <input type="password" id="password" placeholder="Enter Your Password" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};:&quot;\\|,.<>\/?]).{12,}$">
+            <div id="passmessage">
+                <div id="lowercase" class="invalid">At least one lowercase</div>
+                <div id="uppercase" class="invalid">At least one uppercase</div>
+                <div id="number" class="invalid">At least one digit</div>
+                <div id="specialcase" class="invalid">At least one special character</div>
+                <div id="length" class="invalid">Min 12 Characters</div>
+            </div>
+            <input type="submit" id="button" value="Login">
+        </form>
+    </div>
+
+    <script>
+        let email = document.getElementById("email");
+        let password = document.getElementById("password");
+
+        let emailerror = document.getElementById("emailmessage");
+        let passerror = document.getElementById("passmessage");
+
+        let enumber = document.getElementById("enumber");
+        let especialcase = document.getElementById("especialcase");
+
+        let lowcase = document.getElementById("lowercase");
+        let upcase = document.getElementById("uppercase");
+        let number = document.getElementById("number");
+        let specialcase = document.getElementById("specialcase");
+        let lengthlimit = document.getElementById("length");
+
+        let success = document.getElementById('message');
+
+        email.addEventListener('focus', function() {
+            emailerror.style.display = "block";
+        });
+
+        password.addEventListener('focus', function() {
+            passerror.style.display = "block";
+        });
+
+        email.addEventListener('blur', function() {
+            emailerror.style.display = "none";
+        });
+
+        password.addEventListener('blur', function() {
+            passerror.style.display = "none";
+        });
+
+        
+        email.addEventListener('input', function() {
+            if (/^\d/.test(email.value)) {
+                email.value = '';
+            }
+        });
+
+        email.addEventListener('keyup', () => {
+            let numbers = /[0-9]/g;
+
+            if (email.value.match(numbers)) {
+                enumber.classList.add("valid");
+                enumber.classList.remove("invalid");
+            } else {
+                enumber.classList.remove("valid");
+                enumber.classList.add("invalid");
+            }
+
+            let specialsymbol = /[!@#$%^&*_=+-]/g;
+
+            if (email.value.match(specialsymbol)) {
+                especialcase.classList.add("valid");
+                especialcase.classList.remove("invalid");
+            } else {
+                especialcase.classList.remove("valid");
+                especialcase.classList.add("invalid");
+            }
+        });
+
+        password.addEventListener('keyup', () => {
+            let numbers = /[0-9]/g;
+
+            if (password.value.match(numbers)) {
+                number.classList.add("valid");
+                number.classList.remove("invalid");
+            } else {
+                number.classList.remove("valid");
+                number.classList.add("invalid");
+            }
+
+            let specialsymbol = /[!@#$%^&*_=+-]/g;
+
+            if (password.value.match(specialsymbol)) {
+                specialcase.classList.add("valid");
+                specialcase.classList.remove("invalid");
+            } else {
+                specialcase.classList.remove("valid");
+                specialcase.classList.add("invalid");
+            }
+
+            let lowercasechar = /[a-z]/g;
+
+            if (password.value.match(lowercasechar)) {
+                lowcase.classList.add("valid");
+                lowcase.classList.remove("invalid");
+            } else {
+                lowcase.classList.remove("valid");
+                lowcase.classList.add("invalid");
+            }
+            let uppercasechar = /[A-Z]/g;
+
+            if (password.value.match(uppercasechar)) {
+                upcase.classList.add("valid");
+                upcase.classList.remove("invalid");
+            } else {
+                upcase.classList.remove("valid");
+                upcase.classList.add("invalid");
+            }
+
+            if (password.value.length >= 12) {
+                lengthlimit.classList.add("valid");
+                lengthlimit.classList.remove("invalid");
+            } else {
+                lengthlimit.classList.remove("valid");
+                lengthlimit.classList.add("invalid");
+            }
+
+            if(email.value.match(numbers) && email.value.match(specialsymbol) && password.value.match(numbers) && password.value.match(specialsymbol) && password.value.match(lowercasechar) && password.value.match(uppercasechar) && password.value.length >= 12){
+                document.querySelector("form").addEventListener("submit",()=>{
+                alert("Login successful");
+            })
+            }
+        });
+    </script>
+    </body>
+</html>
